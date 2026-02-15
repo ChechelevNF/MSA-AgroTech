@@ -1,0 +1,32 @@
+@startuml
+title AgroTech Farm Management Code Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+class Farm {
+  +String farmId
+  +List<Pigsty> memberships
+}
+
+class Pigsty {
+  +String id
+  +Double leftoverFood
+  +Double waterQuality
+  +Integer pigCount
+  +List<Warning> warnings
+}
+
+class Camera {
+  +String pigstyId
+}
+
+class Warning {
+  +String warningText
+}
+
+Farm "1" -- "0..*" Pigsty : has
+Pigsty "1" -- "0..*" Warning : has
+Pigsty::id *-- Camera::pigstyId
+@enduml
