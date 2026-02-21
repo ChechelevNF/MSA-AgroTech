@@ -5,26 +5,26 @@ top to bottom direction
 
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
-Person(rancher, "Сотрудник фермы", "Получает данные из системы и передает данные с фермы")
 Person(operator, "Оператор", "Администратор управляющий системой ")
 System(AgroTechSystem, "Система AgroTech", "Система обработки данных с фермы")
+System(Agent, "Агент", "Агент фермы")
 
 Container_Boundary(AgroTechSystem, "Система AgroTech") {
   Container(WebApp, "Web Application", "Java, Spring", "Позволяет оператору управлять данными с фермы")
-  Container(MobileApp, "Mobile Application", "Kotlin, Swift", "Позволяет сотруднику фермы получать и передавать данные с фермы")
   Container(Database, "Database", "PostgreSQL", "Хранит данные о состоянии фермы")
   Container(CameraSystem, "Система управления камерами", "AI Agent", "Обработка данных с камер")
   Container(DrinkingSystem, "Система управления поилками", "Java, Spring", "Обработка данных с поилок")
   Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
+  Container(FeedingSystem, "Система управления кормушками", "Java, Spring", "Обработка данных с кормушек")
 
 }
 
-Rel(rancher, MobileApp, "Использование системы")
-Rel(CameraSystem, Database, "Запись данных в систему")
+Rel(CameraSystem, CentralServer, "Запись данных в систему")
 Rel(operator,WebApp,"Управление системой")
-Rel(MobileApp, Database, "Чтение/запись данных фермы")
-Rel(WebApp, Database, "Чтение/запись данных фермы")
-Rel(DrinkingSystem, Database, "Запись данных в систему")
+Rel(WebApp, CentralServer, "Чтение/запись данных фермы")
+Rel(DrinkingSystem, CentralServer, "Запись данных в систему")
+Rel(CentralServer, Database, "Запись и чтение из базы")
+Rel(FeedingSystem, CentralServer, "Запись данных в систему")
 
 
 @enduml
