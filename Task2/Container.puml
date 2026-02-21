@@ -15,6 +15,7 @@ Container_Boundary(AgroTechSystem, "Система AgroTech") {
   Container(Database, "Database", "PostgreSQL", "Хранит данные о состоянии фермы")
   Container(CameraSystem, "Система управления камерами", "AI Agent", "Обработка данных с камер")
   Container(DrinkingSystem, "Система управления поилками", "Java, Spring", "Обработка данных с поилок")
+  Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
 
 }
 
