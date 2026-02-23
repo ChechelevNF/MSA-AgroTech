@@ -6,7 +6,7 @@ top to bottom direction
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
 Container_Boundary(FitLifeSystem, "Система AgroTech") {
-  Container(WebApp, "Web Application", "Java, Spring", "Обработка данных с фермы")
+  Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
   Container(Database, "Database", "PostgreSQL", "Хранение данных с фермы")
 }
 

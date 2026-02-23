@@ -5,20 +5,21 @@ top to bottom direction
 
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
-Person(rancher, "Сотрудник фермы", "Получает данные из системы и передает данные с фермы")
 Person(operator, "Оператор", "Администратор управляющий системой ")
 System(AgroTechSystem, "Система AgroTech", "Система обработки данных с фермы")
+System(Farm, "Ферма", "Агент фермы")
 
 Container_Boundary(AgroTechSystem, "Система AgroTech") {
   Container(WebApp, "Web Application", "Java, Spring", "Позволяет оператору управлять данными с фермы")
   Container(Database, "Database", "PostgreSQL", "Хранит данные о состоянии фермы")
-  Container(CameraSystem, "Система управления камерами", "AI Agent", "Обработка данных с камер")
+  Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
 }
 
-Rel(rancher, WebApp, "Использование системы")
-Rel(CameraSystem, Database, "Запись данных в систему")
 Rel(operator,WebApp,"Управление системой")
-Rel(WebApp, Database, "Чтение/запись данных фермы")
+Rel(WebApp, CentralServer, "Rest API")
+Rel(CentralServer, Database, "SQL")
+Rel(Farm, CentralServer, "Передача данных через Kafka")
+Rel(CentralServer, Farm, "Отправка аллертов через RabbitMQ")
 
 
 @enduml

@@ -7,7 +7,7 @@ top to bottom direction
 
 Person(operator, "Оператор", "Администратор управляющий системой ")
 System(AgroTechSystem, "Система AgroTech", "Система обработки данных с фермы")
-System(Agent, "Агент", "Агент фермы")
+System(Farm, "Ферма", "Агент фермы")
 
 Container_Boundary(AgroTechSystem, "Система AgroTech") {
   Container(WebApp, "Web Application", "Java, Spring", "Позволяет оператору управлять данными с фермы")
@@ -16,15 +16,18 @@ Container_Boundary(AgroTechSystem, "Система AgroTech") {
   Container(DrinkingSystem, "Система управления поилками", "Java, Spring", "Обработка данных с поилок")
   Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
   Container(FeedingSystem, "Система управления кормушками", "Java, Spring", "Обработка данных с кормушек")
-
 }
 
-Rel(CameraSystem, CentralServer, "Запись данных в систему")
+Rel(CameraSystem, CentralServer, "Rest API")
 Rel(operator,WebApp,"Управление системой")
-Rel(WebApp, CentralServer, "Чтение/запись данных фермы")
-Rel(DrinkingSystem, CentralServer, "Запись данных в систему")
-Rel(CentralServer, Database, "Запись и чтение из базы")
-Rel(FeedingSystem, CentralServer, "Запись данных в систему")
+Rel(WebApp, CentralServer, "Rest API")
+Rel(DrinkingSystem, CentralServer, "Rest API")
+Rel(CentralServer, Database, "SQL")
+Rel(FeedingSystem, CentralServer, "Rest API")
+Rel(Farm, DrinkingSystem, "Передача данных через Kafka")
+Rel(Farm, FeedingSystem, "Передача данных через Kafka")
+Rel(Farm, CameraSystem, "Передача данных через Kafka")
+Rel(CentralServer, Farm, "Отправка аллертов через RabbitMQ")
 
 
 @enduml
