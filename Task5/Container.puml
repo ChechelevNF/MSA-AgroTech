@@ -1,0 +1,43 @@
+@startuml
+title AgroTech Container Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(operator, "Оператор", "Администратор управляющий системой ")
+System(AgroTechSystem, "Система AgroTech", "Система обработки данных с фермы")
+System(Farm, "Ферма A", "Агент фермы")
+System(FarmB, "Ферма B", "Агент фермы")
+
+Container_Boundary(AgroTechSystem, "Система AgroTech") {
+  Container(WebApp, "Web Application", "Java, Spring", "Позволяет оператору управлять данными с фермы")
+  Container(Database, "Database A", "PostgreSQL", "Хранит данные о состоянии фермы")
+  Container(DatabaseB, "Database B", "PostgreSQL", "Хранит данные о состоянии фермы")
+  Container(CameraSystem, "Система управления камерами", "AI Agent", "Обработка данных с камер")
+  Container(DrinkingSystem, "Система управления поилками", "Java, Spring", "Обработка данных с поилок")
+  Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
+  Container(FeedingSystem, "Система управления кормушками", "Java, Spring", "Обработка данных с кормушек")
+  Container(IAMSystem, "IAM система", "Java, Spring", "Управление доступами агентов ферм")
+}
+
+Rel(CameraSystem, CentralServer, "Rest API")
+Rel(operator,WebApp,"Управление системой")
+Rel(WebApp, CentralServer, "Rest API")
+Rel(DrinkingSystem, CentralServer, "Rest API")
+Rel(CentralServer, Database, "SQL")
+Rel(CentralServer, DatabaseB, "SQL")
+Rel(FeedingSystem, CentralServer, "Rest API")
+Rel(Farm, DrinkingSystem, "Передача данных через Kafka")
+Rel(Farm, FeedingSystem, "Передача данных через Kafka")
+Rel(Farm, CameraSystem, "Передача данных через Kafka")
+Rel(Farm, IAMSystem, "Передача данных через Kafka")
+Rel(CentralServer, Farm, "Отправка аллертов через RabbitMQ")
+Rel(FarmB, DrinkingSystem, "Передача данных через Kafka")
+Rel(FarmB, FeedingSystem, "Передача данных через Kafka")
+Rel(FarmB, CameraSystem, "Передача данных через Kafka")
+Rel(FarmB, IAMSystem, "Передача данных через Kafka")
+Rel(CentralServer, FarmB, "Отправка аллертов через RabbitMQ")
+
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+title AgroTech Context Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(operator, "Оператор", "Администратор управляющий системой ")
+System(AgroTechSystem, "Система AgroTech", "Система обработки данных с фермы")
+
+Container_Boundary(Farm, "Ферма") {
+    Person(rancher, "Сотрудник фермы", "Получает данные из системы и передает данные с фермы")
+    System(DrinkingSystem, "Поилки", "Поилки на ферме")
+    System(FeedingSystem, "Кормушки", "Кормушки на ферме")
+    System(Cameras, "Камеры", "Камеры на ферме")
+    System(Agent, "Агент", "Агент фермы")
+}
+
+Rel(Agent, rancher, "Получение оповещений из системы")
+Rel(operator,AgroTechSystem,"Управление системой")
+Rel(DrinkingSystem, Agent, "Передача данных")
+Rel(FeedingSystem, Agent, "Передача данных")
+Rel(Cameras, Agent, "Передача данных")
+Rel(Agent, AgroTechSystem, "Получение и передача данных")
+
+
+@enduml

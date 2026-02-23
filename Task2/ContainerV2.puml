@@ -1,0 +1,25 @@
+@startuml
+title AgroTech Container Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(operator, "Оператор", "Администратор управляющий системой ")
+System(AgroTechSystem, "Система AgroTech", "Система обработки данных с фермы")
+System(Farm, "Ферма", "Агент фермы")
+
+Container_Boundary(AgroTechSystem, "Система AgroTech") {
+  Container(WebApp, "Web Application", "Java, Spring", "Позволяет оператору управлять данными с фермы")
+  Container(Database, "Database", "PostgreSQL", "Хранит данные о состоянии фермы")
+  Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
+}
+
+Rel(operator,WebApp,"Управление системой")
+Rel(WebApp, CentralServer, "Rest API")
+Rel(CentralServer, Database, "SQL")
+Rel(Farm, CentralServer, "Передача данных через Kafka")
+Rel(CentralServer, Farm, "Отправка аллертов через RabbitMQ")
+
+
+@enduml
