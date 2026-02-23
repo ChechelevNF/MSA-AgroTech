@@ -5,21 +5,22 @@ top to bottom direction
 
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
+System_Ext(Agent, "RabbitMQ", "Очередь для отправки аллертов агенту фермы")
+
 Container_Boundary(FitLifeSystem, "Система AgroTech") {
   Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
   Container(Database, "Database", "PostgreSQL", "Хранение данных с фермы")
 }
 
-Container(WebApp, "Web Application", "Java, Spring") {
+Container(CentralServer, "Центральный сервер", "Java, Spring") {
   Component(AuthController, "AuthController", "Обработка авторизации и аутентификации")
-  Component(UserController, "UserController", "Кабинет пользователя")
 
   Component(ServiceLayer, "Service Layer", "Бизнес логика")
   Component(RepositoryLayer, "Repository Layer", "Доступ к данным")
 }
 
-Rel(AuthController,ServiceLayer,"Calls business logic")
-Rel(UserController,ServiceLayer,"Calls business logic")
-Rel(ServiceLayer,RepositoryLayer,"Reads/Writes data")
-Rel(RepositoryLayer,Database,"Reads/Writes user data")
+Rel(AuthController,ServiceLayer,"Вызов бизнес логики")
+Rel(ServiceLayer,RepositoryLayer,"Чтение запись данных")
+Rel(RepositoryLayer,Database,"Чтение запись данных")
+Rel(ServiceLayer, Agent, "Отправка сообщений")
 @enduml

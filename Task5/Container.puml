@@ -5,30 +5,39 @@ top to bottom direction
 
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
 
-Person(rancher, "Сотрудник фермы", "Получает данные из системы и передает данные с фермы")
 Person(operator, "Оператор", "Администратор управляющий системой ")
 System(AgroTechSystem, "Система AgroTech", "Система обработки данных с фермы")
+System(Farm, "Ферма A", "Агент фермы")
+System(FarmB, "Ферма B", "Агент фермы")
 
 Container_Boundary(AgroTechSystem, "Система AgroTech") {
   Container(WebApp, "Web Application", "Java, Spring", "Позволяет оператору управлять данными с фермы")
-  Container(MobileApp, "Mobile Application", "Kotlin, Swift", "Позволяет сотруднику фермы получать и передавать данные с фермы")
-  Container(Database, "Database", "PostgreSQL", "Хранит данные о состоянии фермы (уникальна для каждой компании)")
+  Container(Database, "Database A", "PostgreSQL", "Хранит данные о состоянии фермы")
+  Container(DatabaseB, "Database B", "PostgreSQL", "Хранит данные о состоянии фермы")
   Container(CameraSystem, "Система управления камерами", "AI Agent", "Обработка данных с камер")
   Container(DrinkingSystem, "Система управления поилками", "Java, Spring", "Обработка данных с поилок")
-  Container(PaymentService, "Сервис платежей", "Node.js", "Управление платежами")
-
+  Container(CentralServer, "Центральный сервер", "Java, Spring", "Обработка данных с фермы")
+  Container(FeedingSystem, "Система управления кормушками", "Java, Spring", "Обработка данных с кормушек")
+  Container(IAMSystem, "IAM система", "Java, Spring", "Управление доступами агентов ферм")
 }
 
-System_Ext(bank, "Bank System", "Удаленный банк для обработки платежей")
-
-Rel(rancher, MobileApp, "Использование системы")
-Rel(CameraSystem, Database, "Запись данных в систему")
+Rel(CameraSystem, CentralServer, "Rest API")
 Rel(operator,WebApp,"Управление системой")
-Rel(MobileApp, Database, "Чтение/запись данных фермы")
-Rel(WebApp, Database, "Чтение/запись данных фермы")
-Rel(DrinkingSystem, Database, "Запись данных в систему")
-Rel(WebApp, PaymentService, "Запрос на обработку платежа")
-Rel(PaymentService,bank,"Processes payments")
+Rel(WebApp, CentralServer, "Rest API")
+Rel(DrinkingSystem, CentralServer, "Rest API")
+Rel(CentralServer, Database, "SQL")
+Rel(CentralServer, DatabaseB, "SQL")
+Rel(FeedingSystem, CentralServer, "Rest API")
+Rel(Farm, DrinkingSystem, "Передача данных через Kafka")
+Rel(Farm, FeedingSystem, "Передача данных через Kafka")
+Rel(Farm, CameraSystem, "Передача данных через Kafka")
+Rel(Farm, IAMSystem, "Передача данных через Kafka")
+Rel(CentralServer, Farm, "Отправка аллертов через RabbitMQ")
+Rel(FarmB, DrinkingSystem, "Передача данных через Kafka")
+Rel(FarmB, FeedingSystem, "Передача данных через Kafka")
+Rel(FarmB, CameraSystem, "Передача данных через Kafka")
+Rel(FarmB, IAMSystem, "Передача данных через Kafka")
+Rel(CentralServer, FarmB, "Отправка аллертов через RabbitMQ")
 
 
 @enduml
